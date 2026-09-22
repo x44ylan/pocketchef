@@ -1,0 +1,7 @@
+{
+  "version": "11.4.0",
+  "revision": "49d1a5634a67a3b806c6db0fdca7dcecb41a776c",
+  "source": "https://github.com/gchq/CyberChef",
+  "workerSha256": "04870f1839346c7c8c234458b6d606d33bad07d6239d597b6acdbdc10afec1a5",
+  "bundleSha256": "d37d6c86c02a2154feb9e923d57f8e43d237dbf7a280244b14f30866bf01ae5b"
+}

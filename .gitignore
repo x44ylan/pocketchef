@@ -1,0 +1,12 @@
+node_modules/
+dist/
+test-results/
+playwright-report/
+.playwright-cli/
+
+# Local settings and agent tooling
+.env
+.env.*
+!.env.example
+.agents/
+skills-lock.json

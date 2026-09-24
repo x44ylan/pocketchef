@@ -1,7 +1,6 @@
 import { useState, useEffect, useRef, useMemo } from "react";
 import { useTheme } from "@/components/theme-provider";
 import {
-  Terminal,
   ArrowDownToLine,
   ArrowUpFromLine,
   ArrowUp,
@@ -392,7 +391,18 @@ export default function App() {
     <div className="app-shell">
       <header className="app-header">
         <div className="brand">
-          <Terminal aria-hidden="true" />
+          <svg
+            viewBox="0 0 32 32"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.75"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            aria-hidden="true"
+          >
+            <path d="M7 23v-9.5C5.2 12.9 4 11.3 4 9.5c0-3.1 3-5.1 6-4.2 2-3.1 10-3.1 12 0 3-.9 6 1.1 6 4.2 0 1.8-1.2 3.4-3 4V23" />
+            <path d="M7 23h18v3a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2v-3ZM12 14v5m8-5v5" />
+          </svg>
           <h1>PocketChef</h1>
         </div>
         <div className="header-actions">

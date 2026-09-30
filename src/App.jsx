@@ -22,7 +22,6 @@ import {
 import { toast } from "sonner";
 import { ChefEngine } from "./engine";
 import {
-  operationGroups,
   defaultArgs,
   validateRecipe,
   updateArgs,
@@ -76,10 +75,6 @@ import {
   FieldError,
 } from "@/components/ui/field";
 import { Textarea } from "@/components/ui/textarea";
-import {
-  NativeSelect,
-  NativeSelectOption,
-} from "@/components/ui/native-select";
 import { Switch } from "@/components/ui/switch";
 import { Empty, EmptyHeader, EmptyDescription } from "@/components/ui/empty";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
@@ -157,9 +152,7 @@ export default function App() {
     [status, setStatus] = useState("Loading engine"),
     [result, setResult] = useState(null),
     [revision, setRevision] = useState(0);
-  const [picker, setPicker] = useState(false),
-    [category, setCategory] = useState("All"),
-    [search, setSearch] = useState(""),
+  const [search, setSearch] = useState(""),
     [importOpen, setImportOpen] = useState(false),
     [json, setJson] = useState(""),
     [importError, setImportError] = useState("");
@@ -190,10 +183,6 @@ export default function App() {
       instance.fail(new Error("Unmounted"));
     };
   }, []);
-  const groups = useMemo(
-    () => (catalog ? operationGroups(catalog) : []),
-    [catalog],
-  );
   const operationIndex = useMemo(
     () =>
       Object.keys(catalog || {})
@@ -202,17 +191,11 @@ export default function App() {
     [catalog],
   );
   const visibleOperations = useMemo(() => {
-    const allowed =
-      category === "All"
-        ? null
-        : new Set(groups.find((group) => group.name === category)?.ops || []);
     const words = search.trim().toLowerCase().split(/\s+/).filter(Boolean);
     return operationIndex.filter(
-      (op) =>
-        (!allowed || allowed.has(op.name)) &&
-        words.every((word) => op.searchable.includes(word)),
+      (op) => words.every((word) => op.searchable.includes(word)),
     );
-  }, [operationIndex, groups, category, search]);
+  }, [operationIndex, search]);
   const richPreview = useMemo(
     () =>
       result?.data.type === "html"
@@ -238,13 +221,8 @@ export default function App() {
       ...recipe,
       { op, args: defaultArgs(catalog[op]), disabled: false },
     ]);
-    setPicker(false);
-    setTab("recipe");
-  };
-  const openPicker = () => {
-    setCategory("All");
     setSearch("");
-    setPicker(true);
+    setTab("recipe");
   };
   const clearInput = () => {
     setInput("");
@@ -673,16 +651,45 @@ export default function App() {
                     </EmptyHeader>
                   </Empty>
                 )}
-                <Button
-                  variant="outline"
-                  id="add-operation"
-                  className="w-full justify-between"
-                  onClick={openPicker}
-                  disabled={!catalog}
+                <Command
+                  id="operation-search"
+                  className="recipe-search"
+                  shouldFilter={false}
                 >
-                  Add operation
-                  <Plus data-icon="inline-end" />
-                </Button>
+                  <CommandInput
+                    aria-label="Search operations"
+                    placeholder="Search and add an operation…"
+                    value={search}
+                    onValueChange={setSearch}
+                    disabled={!catalog}
+                  />
+                  {search.trim() && (
+                    <CommandList className="operation-list">
+                      {visibleOperations.length === 0 && (
+                        <CommandEmpty>No operations found.</CommandEmpty>
+                      )}
+                      <CommandGroup
+                        heading={`${visibleOperations.length} ${visibleOperations.length === 1 ? "result" : "results"}`}
+                      >
+                        {visibleOperations.map(({ name }) => (
+                          <CommandItem
+                            key={name}
+                            value={name}
+                            data-operation={name}
+                            onSelect={() => add(name)}
+                            className="min-h-11"
+                          >
+                            <Braces />
+                            <span className="min-w-0 flex-1">{name}</span>
+                            <CommandShortcut>
+                              <Plus />
+                            </CommandShortcut>
+                          </CommandItem>
+                        ))}
+                      </CommandGroup>
+                    </CommandList>
+                  )}
+                </Command>
               </div>
             </TabsContent>
             <TabsContent
@@ -821,76 +828,6 @@ export default function App() {
           </Button>
         </div>
       </main>
-      <Dialog open={picker} onOpenChange={setPicker}>
-        <DialogContent
-          id="operation-dialog"
-          className="operation-dialog sm:max-w-lg"
-        >
-          <DialogHeader>
-            <DialogTitle>Add operation</DialogTitle>
-            <DialogDescription className="sr-only">
-              Choose the next step in your recipe.
-            </DialogDescription>
-          </DialogHeader>
-          <Command shouldFilter={false}>
-            <CommandInput
-              id="operation-search"
-              aria-label="Search operations"
-              placeholder="Search operations…"
-              value={search}
-              onValueChange={setSearch}
-            />
-            <FieldGroup className="category-filter">
-              <Field>
-                <FieldLabel className="sr-only" htmlFor="operation-category">
-                  Category
-                </FieldLabel>
-                <NativeSelect
-                  id="operation-category"
-                  className="w-full"
-                  value={category}
-                  onChange={(e) => setCategory(e.target.value)}
-                >
-                  <NativeSelectOption value="All">
-                    All operations ({operationIndex.length})
-                  </NativeSelectOption>
-                  {groups.map((group) => (
-                    <NativeSelectOption key={group.name} value={group.name}>
-                      {group.name} ({group.ops.length})
-                    </NativeSelectOption>
-                  ))}
-                </NativeSelect>
-              </Field>
-            </FieldGroup>
-            <CommandList className="operation-list">
-              {visibleOperations.length === 0 && (
-                <CommandEmpty>No operations found.</CommandEmpty>
-              )}
-              <CommandGroup
-                heading={
-                  search ? `${visibleOperations.length} results` : undefined
-                }
-              >
-                {visibleOperations.map(({ name }) => (
-                  <CommandItem
-                    key={name}
-                    value={name}
-                    data-operation={name}
-                    onSelect={() => add(name)}
-                    className="min-h-11"
-                  >
-                    <Braces />
-                    <span className="min-w-0 flex-1">{name}</span>
-                    <CommandShortcut>
-                      <Plus />
-                    </CommandShortcut>
-                  </CommandItem>
-                ))}
-              </CommandGroup>
-            </CommandList>
-          </Command>
-        </DialogContent>
-      </Dialog>
       <Dialog open={importOpen} onOpenChange={setImportOpen}>
         <DialogContent id="import-dialog" className="sm:max-w-lg">
           <DialogHeader>

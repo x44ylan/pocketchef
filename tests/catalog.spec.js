@@ -24,7 +24,6 @@ async function importRecipe(page, recipe) {
 }
 async function add(page, name) {
   await page.locator('[data-tab="recipe"]').click();
-  await page.locator("#add-operation").click();
   await page.getByRole("combobox", { name: "Search operations" }).fill(name);
   await page
     .locator("[data-operation]")
@@ -33,7 +32,7 @@ async function add(page, name) {
   await page.locator(".step summary").last().click();
 }
 
-test("all 504 catalogue entries roundtrip, render, and appear once in the picker", async ({
+test("all 504 catalogue entries roundtrip, render, and are searchable inline", async ({
   page,
 }) => {
   test.setTimeout(90000);
@@ -69,16 +68,15 @@ test("all 504 catalogue entries roundtrip, render, and appear once in the picker
   expect(data.types).toHaveLength(15);
   expect(data.groupNames).toHaveLength(504);
   await page.locator('[data-tab="recipe"]').click();
-  await page.locator("#add-operation").click();
-  await expect(page.locator("[data-operation]")).toHaveCount(504);
-  await page.getByLabel("Category", { exact: true }).selectOption("Multimedia");
+  await page.getByRole("combobox", { name: "Search operations" }).fill("render image");
   await expect(page.locator('[data-operation="Render Image"]')).toBeVisible();
-  await page.getByLabel("Category", { exact: true }).selectOption("All");
+  await page.getByRole("combobox", { name: "Search operations" }).fill("");
+  await expect(page.locator("[data-operation]")).toHaveCount(0);
   await page
     .getByRole("combobox", { name: "Search operations" })
     .fill("definitely-not-an-operation");
   await expect(page.getByText("No operations found.")).toBeVisible();
-  await page.keyboard.press("Escape");
+  await page.getByRole("combobox", { name: "Search operations" }).fill("");
   for (let i = 0; i < data.recipes.length; i += 50) {
     const chunk = data.recipes.slice(i, i + 50);
     await importRecipe(page, chunk);

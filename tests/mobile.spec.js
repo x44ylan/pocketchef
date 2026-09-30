@@ -129,7 +129,6 @@ test("phone flow, settings, stale output and no horizontal overflow", async ({
   await page.locator('[data-tab="recipe"]').click();
   await page.locator(".step summary").click();
   await expect(page.getByLabel("Alphabet", { exact: true })).toBeVisible();
-  await page.locator("#add-operation").click();
   await page.getByRole("combobox", { name: "Search operations" }).fill("upper");
   await page.locator('[data-operation="To Upper case"]').click();
   await page.locator("#bake").click();

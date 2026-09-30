@@ -177,6 +177,11 @@
   width: 28px;
   height: 28px;
   flex-shrink: 0;
+  transform: translateY(1px);
+}
+.brand h1 {
+  line-height: 1;
+  transform: translateY(2px);
 }
 .header-actions {
   display: flex;
@@ -377,16 +382,16 @@
 #bake {
   min-width: 112px;
 }
-.category-filter {
-  padding: 12px 4px;
-  overflow-x: auto;
+.recipe-search {
+  flex-shrink: 0;
+  width: 100%;
+  height: auto;
+  border: 1px solid var(--input);
+  background: transparent;
 }
 .operation-list {
-  max-height: 45dvh;
-}
-.operation-dialog {
-  max-height: 90dvh;
-  overflow: auto;
+  max-height: min(320px, 38dvh);
+  border-top: 1px solid var(--border);
 }
 @media (min-width: 901px) {
   .panel[data-state="inactive"] {
@@ -503,15 +508,8 @@
   [data-slot="dropdown-menu-item"] {
     min-height: 40px;
   }
-  .operation-dialog {
-    width: calc(100% - 24px);
-    max-width: none;
-  }
   .operation-list {
-    max-height: 42dvh;
-  }
-  .category-filter [data-slot="toggle-group-item"] {
-    min-height: 38px;
+    max-height: min(280px, 34dvh);
   }
   #recipe-json {
     font-size: 16px;

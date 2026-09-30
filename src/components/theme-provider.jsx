@@ -37,6 +37,10 @@ export function ThemeProvider({ children }) {
   useLayoutEffect(() => {
     document.documentElement.classList.toggle("dark", resolvedTheme === "dark");
     document.documentElement.style.colorScheme = resolvedTheme;
+    const suffix = resolvedTheme === "dark" ? "-dark" : "";
+    document.querySelector("#favicon")?.setAttribute("href", `/icon-${resolvedTheme}.svg?v=5`);
+    document.querySelector("#favicon-fallback")?.setAttribute("href", `/favicon${suffix}.ico?v=5`);
+    document.querySelector("#favicon-png")?.setAttribute("href", `/favicon${suffix}.png?v=5`);
   }, [resolvedTheme]);
   const setTheme = (value) => {
     updateTheme(value);

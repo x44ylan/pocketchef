@@ -372,13 +372,6 @@
   text-overflow: ellipsis;
   white-space: nowrap;
 }
-.status-dot {
-  width: 4px;
-  height: 4px;
-  border-radius: 50%;
-  background: var(--muted-foreground);
-  margin: 0 5px;
-}
 #bake {
   min-width: 112px;
 }

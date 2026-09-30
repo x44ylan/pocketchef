@@ -169,7 +169,7 @@ export default function App() {
       .then((c) => {
         if (active) {
           setCatalog(c);
-          setStatus("Ready");
+          setStatus("");
         }
       })
       .catch((e) => {
@@ -808,11 +808,9 @@ export default function App() {
           <div className="bake-status">
             {busy ? (
               <Loader2 className="animate-spin" />
-            ) : result && !stale ? (
+            ) : status && result && !stale ? (
               <Check />
-            ) : (
-              <span className="status-dot" />
-            )}
+            ) : null}
             <div>
               <span id="run-status" role="status">
                 {status}

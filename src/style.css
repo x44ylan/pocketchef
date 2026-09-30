@@ -452,7 +452,9 @@
   .recipe-panel > [data-slot="separator"] {
     display: none;
   }
-  .data-editor,
+  .data-editor {
+    padding: 12px;
+  }
   #output {
     padding: 12px 0;
   }

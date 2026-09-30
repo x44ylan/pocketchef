@@ -485,8 +485,18 @@
     background: var(--background);
     z-index: 10;
   }
+  .bake-status {
+    max-width: 40%;
+  }
+  .bake-status:has(#run-status:empty) {
+    display: none;
+  }
+  .bake-status > svg {
+    flex-shrink: 0;
+  }
   #bake {
     height: 44px;
+    flex: 1;
   }
   [data-slot="button"] {
     min-height: 40px;

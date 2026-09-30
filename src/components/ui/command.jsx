@@ -52,20 +52,27 @@ function CommandDialog({
   );
 }
 
-function CommandInput({ className, ...props }) {
+function CommandInput({ className, variant = "default", ...props }) {
+  const inline = variant === "inline";
   return (
-    <div data-slot="command-input-wrapper" className="p-1 pb-0">
-      <InputGroup className="h-8! rounded-lg! border-input/30 bg-input/30 shadow-none! *:data-[slot=input-group-addon]:pl-2!">
+    <div data-slot="command-input-wrapper" className={inline ? "" : "p-1 pb-0"}>
+      <InputGroup className={cn(
+        "rounded-lg!",
+        inline
+          ? "h-11! gap-2 border-input bg-transparent focus-within:border-ring focus-within:ring-2 focus-within:ring-ring/30 *:data-[slot=input-group-addon]:pl-3!"
+          : "h-8! border-input/30 bg-input/30 shadow-none! *:data-[slot=input-group-addon]:pl-2!",
+      )}>
         <CommandPrimitive.Input
           data-slot="command-input"
           className={cn(
-            "w-full text-sm outline-hidden disabled:cursor-not-allowed disabled:opacity-50",
+            "w-full min-w-0 text-sm outline-hidden disabled:cursor-not-allowed disabled:opacity-50",
+            inline && "h-full bg-transparent pr-3 text-base placeholder:text-muted-foreground md:text-sm",
             className,
           )}
           {...props}
         />
         <InputGroupAddon>
-          <SearchIcon className="size-4 shrink-0 opacity-50" />
+          <SearchIcon className={cn("size-4 shrink-0", !inline && "opacity-50")} />
         </InputGroupAddon>
       </InputGroup>
     </div>

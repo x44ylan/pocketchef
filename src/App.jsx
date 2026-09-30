@@ -653,12 +653,13 @@ export default function App() {
                 )}
                 <Command
                   id="operation-search"
-                  className="recipe-search"
+                  className="recipe-search rounded-none!"
                   shouldFilter={false}
                 >
                   <CommandInput
+                    variant="inline"
                     aria-label="Search operations"
-                    placeholder="Search and add an operation…"
+                    placeholder="Search operations…"
                     value={search}
                     onValueChange={setSearch}
                     disabled={!catalog}

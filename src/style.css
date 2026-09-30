@@ -386,12 +386,16 @@
   flex-shrink: 0;
   width: 100%;
   height: auto;
-  border: 1px solid var(--input);
+  padding: 0;
+  overflow: visible;
+  gap: 8px;
   background: transparent;
 }
 .operation-list {
   max-height: min(320px, 38dvh);
-  border-top: 1px solid var(--border);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--popover);
 }
 @media (min-width: 901px) {
   .panel[data-state="inactive"] {

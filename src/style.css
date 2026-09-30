@@ -394,6 +394,9 @@
   .panel[data-state="inactive"] {
     display: flex;
   }
+  .input-panel > .editor-field {
+    padding-inline: 16px;
+  }
 }
 @media (max-width: 1100px) and (min-width: 901px) {
   .app-main {

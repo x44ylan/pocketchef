@@ -16,8 +16,23 @@ test("all favicon formats follow appearance, persist, and remain transparent", a
           if (reload) await page.reload();
           const resolved = theme === "system" ? os : theme;
           const suffix = resolved === "dark" ? "-dark" : "";
-          const hrefs = [`/favicon${suffix}.ico?v=5`, `/favicon${suffix}.png?v=5`, `/icon-${resolved}.svg?v=5`];
+          const hrefs = [`/favicon${suffix}.ico?v=line1`, `/favicon${suffix}.png?v=line1`, `/icon-${resolved}.svg?v=line1`];
           await expect.poll(() => page.locator('link[rel="icon"]').evaluateAll(nodes => nodes.map(n => n.getAttribute("href")))).toEqual(hrefs);
+          const touch = await page.locator('link[rel="apple-touch-icon"]').getAttribute('href');
+          if (!touch.endsWith('?v=line1')) throw Error('Stale touch icon URL');
+          const home = await page.evaluate(async (href) => {
+              const image = new Image(); image.src = href; await image.decode();
+              const canvas = document.createElement('canvas'); canvas.width = canvas.height = 180;
+              const ctx = canvas.getContext('2d'); ctx.drawImage(image, 0, 0);
+              const pixels = ctx.getImageData(0, 0, 180, 180).data;
+              let visible = 0;
+              for (let i = 0; i < pixels.length; i += 4) if (pixels[i + 3] > 200) {
+                  if (pixels[i] < 230 || pixels[i + 1] < 230 || pixels[i + 2] < 230) throw Error('Home-screen icon has dark ink');
+                  visible++;
+              }
+              return { width: image.naturalWidth, height: image.naturalHeight, corner: pixels[3], visible };
+          }, touch);
+          if (home.width !== 180 || home.height !== 180 || home.corner !== 0 || home.visible < 500) throw Error('Incorrect home-screen artwork');
           for (const href of hrefs) {
             const response = await page.request.get(href);
             expect(response.status()).toBe(200);
@@ -43,7 +58,7 @@ test("all favicon formats follow appearance, persist, and remain transparent", a
         }
       }
       await page.emulateMedia({ colorScheme: os === "dark" ? "light" : "dark" });
-      await expect(page.locator("#favicon")).toHaveAttribute("href", `/icon-${os === "dark" ? "light" : "dark"}.svg?v=5`);
+      await expect(page.locator("#favicon")).toHaveAttribute("href", `/icon-${os === "dark" ? "light" : "dark"}.svg?v=line1`);
     }
   }
 });

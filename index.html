@@ -12,11 +12,11 @@
       content="A pocket-sized workspace for CyberChef recipes."
     />
     <title>PocketChef</title>
-    <link id="favicon-fallback" rel="icon" href="/favicon.ico?v=5" type="image/x-icon" sizes="16x16 32x32 48x48" />
-    <link id="favicon-png" rel="icon" href="/favicon.png?v=5" type="image/png" sizes="32x32" />
-    <link id="favicon" rel="icon" href="/icon-light.svg?v=5" type="image/svg+xml" sizes="any" />
-    <link rel="apple-touch-icon" href="/apple-touch-icon.png?v=5" sizes="180x180" />
-    <link rel="manifest" href="/site.webmanifest?v=5" />
+    <link id="favicon-fallback" rel="icon" href="/favicon.ico?v=line1" type="image/x-icon" sizes="16x16 32x32 48x48" />
+    <link id="favicon-png" rel="icon" href="/favicon.png?v=line1" type="image/png" sizes="32x32" />
+    <link id="favicon" rel="icon" href="/icon-light.svg?v=line1" type="image/svg+xml" sizes="any" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png?v=line1" sizes="180x180" />
+    <link rel="manifest" href="/site.webmanifest?v=line1" />
     <meta name="apple-mobile-web-app-title" content="PocketChef" />
     <script>
       let theme = "system";
@@ -29,9 +29,9 @@
           matchMedia("(prefers-color-scheme: dark)").matches);
       document.documentElement.classList.toggle("dark", dark);
       document.documentElement.style.colorScheme = dark ? "dark" : "light";
-      document.getElementById("favicon").href = `/icon-${dark ? "dark" : "light"}.svg?v=5`;
-      document.getElementById("favicon-fallback").href = `/favicon${dark ? "-dark" : ""}.ico?v=5`;
-      document.getElementById("favicon-png").href = `/favicon${dark ? "-dark" : ""}.png?v=5`;
+      document.getElementById("favicon").href = `/icon-${dark ? "dark" : "light"}.svg?v=line1`;
+      document.getElementById("favicon-fallback").href = `/favicon${dark ? "-dark" : ""}.ico?v=line1`;
+      document.getElementById("favicon-png").href = `/favicon${dark ? "-dark" : ""}.png?v=line1`;
     </script>
   </head>
   <body>
